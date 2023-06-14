@@ -2,28 +2,22 @@ package com.wojtekzolkowski.airplanereservationsystem.service;
 
 import com.wojtekzolkowski.airplanereservationsystem.dao.UserDao;
 import com.wojtekzolkowski.airplanereservationsystem.model.User;
-import org.springframework.security.core.userdetails.UserDetails;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
 
-public class UserService
-
+@Service
+@RequiredArgsConstructor
+public class UserService implements UserDetailsService
 {
 
     private final UserDao userDao;
 
-    public UserService(UserDao userDao)
+    @Override
+    public User loadUserByUsername(String username)
     {
-        this.userDao = userDao;
+        return userDao.findByUsername(username).orElseThrow(()->new UsernameNotFoundException(("user not found")));
     }
-//
-//    @Override
-//    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException
-//    {
-//        User user = userDao.findByUsername(username);
-//        if(user == null){
-//            throw new UsernameNotFoundException("User not found");
-//        }
-//        return new U;
-//    }
+
 }
